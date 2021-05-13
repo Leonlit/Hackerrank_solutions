@@ -19,6 +19,7 @@ public static List<Integer> dynamicArray(int n, List<List<Integer>> queries) {
             }
         }catch (IndexOutOfBoundsException ex) {
             x--;
+            //if the index is out of bounds, means that we need to increase the size of our array list.
             while (arr.size() < idx + 1) {
                 arr.add(new ArrayList<Integer>());
             }
@@ -38,5 +39,74 @@ public static List<Integer> rotateLeft(int d, List<Integer> arr) {
         newArr[(size - (d - x)) % size] = arr.get(x);
     }
     return Arrays.asList(newArr);
+}
+```
+
+
+## Sparse Array
+
+```java
+public static List<Integer> matchingStrings(List<String> strings, List<String> queries) {
+    int arr[] = new int[queries.size()];
+    int s_size = strings.size();
+    int q_size = queries.size();
+    for (int x=0;x<s_size;x++) {
+        String curr = strings.get(x);
+        for (int y=0;y<q_size;y++) {
+            if (curr.compareTo(queries.get(y)) == 0) {
+                arr[y] += 1;
+            }
+        }
+    }
+    for (int x = 0;x< arr.length;x++) {
+        System.out.println(arr);
+    }
+    return Arrays.stream(arr).boxed().collect(Collectors.toList());
+}
+```
+
+## Array Manipulation
+
+### Brute force solution
+``` java
+public static long arrayManipulation(int n, List<List<Integer>> queries) {
+// Write your code here
+    long arr[] = new long[n];
+    long max = Long.MIN_VALUE;
+    for (int x=0;x<queries.size();x++) {
+        List<Integer> curr = queries.get(x);
+        int start = curr.get(0);
+        int end = curr.get(1);
+        long value = curr.get(2);
+        for (int y = start - 1;y < end;y++) {
+            arr[y] += value;
+            if(max < arr[y]) max = arr[y];
+        }
+    }
+    return max;
+}
+```
+
+### Prefix sum solution
+``` java
+public static long arrayManipulation(int n, List<List<Integer>> queries) {
+// Write your code here
+    long arr[] = new long[n + 1];
+    for (int x=0;x<queries.size();x++) {
+        List<Integer> curr = queries.get(x);
+        int start = curr.get(0);
+        int end = curr.get(1);
+        int value = curr.get(2);
+        arr[start - 1] += value;
+        arr[end] -= value;
+    }
+    System.out.println(Arrays.toString(arr));
+    long max = 0;
+    long sum = 0;
+    for (int x=0;x<arr.length;x++ ) {
+        sum += arr[x];
+        max = Math.max(sum, max);
+    }
+    return max;
 }
 ```
